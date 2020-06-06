@@ -32,14 +32,18 @@ public class App {
         LOGGER = Logger.getLogger(App.class.getName());
     }
 
+    /**
+     * @param args - To run program please provide file name to sort
+     * If running from IDE Add new configuration and provide file name as Program Argument
+     */
     public static void main(String[] args) {
         try {
             if (args != null && args.length > 0) {
                 String fileName = args[0];
 
                 if (fileName != null && fileName.length() > 0) {
-                    /** If you want to sort numbers from file uncomment the line 44
-                     * and comment the 46 line
+                    /** If you want to sort numbers from file uncomment the line 50
+                     * and comment the 48 line
                      */
 //                    Integer[] array = getDataFromFile(fileName);
 
