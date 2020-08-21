@@ -40,9 +40,7 @@ public class App {
     public static void main(String[] args) throws IOException {
         printFilesNames();
         String filename = getFileNameFromUser();
-        Integer[] numbers = getDataFromFile(filename);
-        sortBasedOnUserChoice(numbers);
-        saveDataToFile(numbers, SORTED_FILE_NAME_PREFIX + filename);
+        sortBasedOnUserChoice(filename);
     }
 
     private static void printFilesNames() {
@@ -69,34 +67,55 @@ public class App {
         return array;
     }
 
-    private static void sortBasedOnUserChoice(Integer[] numbers) {
+    private static void sortBasedOnUserChoice(String filename) throws IOException {
         boolean run = true;
         while (run) {
             printSortingMenu();
             String response = scanner.nextLine();
             long start = 0;
             long end = 0;
+            Integer[] numbers = null;
 
             switch (response) {
                 case "1":
+                    LOGGER.info("Sorting array started.");
                     start = System.currentTimeMillis();
+
+                    numbers = getDataFromFile(filename);
+
                     sortUsingInsertionSortAlgorithm(numbers);
                     end = System.currentTimeMillis();
+                    saveDataToFile(numbers, SORTED_FILE_NAME_PREFIX + filename);
                     break;
                 case "2":
+                    LOGGER.info("Sorting array started.");
                     start = System.currentTimeMillis();
+
+                    numbers = getDataFromFile(filename);
+
                     sortUsingBuiltInMethod(numbers);
                     end = System.currentTimeMillis();
+                    saveDataToFile(numbers, SORTED_FILE_NAME_PREFIX + filename);
                     break;
                 case "3":
+                    LOGGER.info("Sorting array started.");
                     start = System.currentTimeMillis();
+
+                    numbers = getDataFromFile(filename);
+
                     sortUsingInsertionSortAlgorithmWithList(new ArrayList<>(asList(numbers)));
                     end = System.currentTimeMillis();
+                    saveDataToFile(numbers, SORTED_FILE_NAME_PREFIX + filename);
                     break;
                 case "4":
+                    LOGGER.info("Sorting array started.");
                     start = System.currentTimeMillis();
+
+                    numbers = getDataFromFile(filename);
+
                     sortUsingInsertionSortAlgorithmWithList(new LinkedList<>(asList(numbers)));
                     end = System.currentTimeMillis();
+                    saveDataToFile(numbers, SORTED_FILE_NAME_PREFIX + filename);
                     break;
                 case "Q":
                     run = false;
@@ -107,6 +126,14 @@ public class App {
             LOGGER.info("Sorting is finished, total sorting time: " + (end - start) + "ms");
         }
     }
+
+//    private static AlgorithmExecutionStats sort(Integer[] numbers, Consumer<Integer> consumer) {
+//        long start = System.currentTimeMillis();
+//        function.apply();
+//        long end = System.currentTimeMillis();
+//
+//        return new AlgorithmExecutionStats(start, end);
+//    }
 
     private static void printSortingMenu() {
         System.out.println("Which method you want to sort the numbers?");
@@ -139,7 +166,6 @@ public class App {
     }
 
     private static void sortUsingInsertionSortAlgorithm(Integer[] array) {
-        LOGGER.info("Sorting array started.");
         int arrayLength = array.length;
 
         for (int i = 0; i < arrayLength; i++) {
