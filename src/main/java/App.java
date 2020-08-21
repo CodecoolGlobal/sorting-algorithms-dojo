@@ -69,51 +69,43 @@ public class App {
     }
 
     private static void sortBasedOnUserChoice(String filename) throws IOException {
-        boolean run = true;
-        while (run) {
-            Integer[] numbers = null;
-            AlgorithmExecutionStats stats = null;
+        Integer[] numbers = null;
 
-            printSortingMenu();
-            String response = scanner.nextLine();
-            switch (response) {
-                case "1":
-                    numbers = getDataFromFile(filename);
-                    stats = sort(numbers, App::sortUsingInsertionSortAlgorithm);
-                    saveDataToFile(numbers, SORTED_FILE_NAME_PREFIX + filename);
-                    break;
-                case "2":
-                    numbers = getDataFromFile(filename);
-                    stats = sort(numbers, App::sortUsingBuiltInMethod);
-                    saveDataToFile(numbers, SORTED_FILE_NAME_PREFIX + filename);
-                    break;
-                case "3":
-                    numbers = getDataFromFile(filename);
-                    stats = sort(numbers, unsorted -> sortUsingInsertionSortAlgorithmWithList(new ArrayList<>(asList(unsorted))));
-                    saveDataToFile(numbers, SORTED_FILE_NAME_PREFIX + filename);
-                    break;
-                case "4":
-                    numbers = getDataFromFile(filename);
-                    stats = sort(numbers, unsorted -> sortUsingInsertionSortAlgorithmWithList(new LinkedList<>(asList(unsorted))));
-                    saveDataToFile(numbers, SORTED_FILE_NAME_PREFIX + filename);
-                    break;
-                case "Q":
-                    run = false;
-                    break;
-                default:
-                    LOGGER.info("Wrong option has been chosen.");
-            }
-            LOGGER.info("Sorting is finished, total sorting time: " + stats.calculateAlgorithmExecutionTime() + "ms");
+        printSortingMenu();
+        String response = scanner.nextLine();
+        switch (response) {
+            case "1":
+                numbers = getDataFromFile(filename);
+                sort(numbers, App::sortUsingInsertionSortAlgorithm);
+                break;
+            case "2":
+                numbers = getDataFromFile(filename);
+                sort(numbers, App::sortUsingBuiltInMethod);
+                break;
+            case "3":
+                numbers = getDataFromFile(filename);
+                sort(numbers, unsorted -> sortUsingInsertionSortAlgorithmWithList(new ArrayList<>(asList(unsorted))));
+                break;
+            case "4":
+                numbers = getDataFromFile(filename);
+                sort(numbers, unsorted -> sortUsingInsertionSortAlgorithmWithList(new LinkedList<>(asList(unsorted))));
+                break;
+            default:
+                LOGGER.info("Wrong option has been chosen.");
+        }
+
+        if (numbers != null) {
+            saveDataToFile(numbers, SORTED_FILE_NAME_PREFIX + filename);
         }
     }
 
-    private static AlgorithmExecutionStats sort(Integer[] numbers, Consumer<Integer[]> consumer) {
+    private static void sort(Integer[] numbers, Consumer<Integer[]> consumer) {
         LOGGER.info("Sorting array started.");
         long start = System.currentTimeMillis();
         consumer.accept(numbers);
         long end = System.currentTimeMillis();
 
-        return new AlgorithmExecutionStats(start, end);
+        LOGGER.info("Sorting is finished, total sorting time: " + (end - start) + "ms");
     }
 
     private static void printSortingMenu() {
