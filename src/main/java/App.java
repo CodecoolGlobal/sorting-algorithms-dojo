@@ -3,6 +3,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import static java.nio.file.Files.lines;
@@ -70,51 +71,30 @@ public class App {
     private static void sortBasedOnUserChoice(String filename) throws IOException {
         boolean run = true;
         while (run) {
+            Integer[] numbers = null;
+            AlgorithmExecutionStats stats = null;
+
             printSortingMenu();
             String response = scanner.nextLine();
-            long start = 0;
-            long end = 0;
-            Integer[] numbers = null;
-
             switch (response) {
                 case "1":
-                    LOGGER.info("Sorting array started.");
-                    start = System.currentTimeMillis();
-
                     numbers = getDataFromFile(filename);
-
-                    sortUsingInsertionSortAlgorithm(numbers);
-                    end = System.currentTimeMillis();
+                    stats = sort(numbers, App::sortUsingInsertionSortAlgorithm);
                     saveDataToFile(numbers, SORTED_FILE_NAME_PREFIX + filename);
                     break;
                 case "2":
-                    LOGGER.info("Sorting array started.");
-                    start = System.currentTimeMillis();
-
                     numbers = getDataFromFile(filename);
-
-                    sortUsingBuiltInMethod(numbers);
-                    end = System.currentTimeMillis();
+                    stats = sort(numbers, App::sortUsingBuiltInMethod);
                     saveDataToFile(numbers, SORTED_FILE_NAME_PREFIX + filename);
                     break;
                 case "3":
-                    LOGGER.info("Sorting array started.");
-                    start = System.currentTimeMillis();
-
                     numbers = getDataFromFile(filename);
-
-                    sortUsingInsertionSortAlgorithmWithList(new ArrayList<>(asList(numbers)));
-                    end = System.currentTimeMillis();
+                    stats = sort(numbers, unsorted -> sortUsingInsertionSortAlgorithmWithList(new ArrayList<>(asList(unsorted))));
                     saveDataToFile(numbers, SORTED_FILE_NAME_PREFIX + filename);
                     break;
                 case "4":
-                    LOGGER.info("Sorting array started.");
-                    start = System.currentTimeMillis();
-
                     numbers = getDataFromFile(filename);
-
-                    sortUsingInsertionSortAlgorithmWithList(new LinkedList<>(asList(numbers)));
-                    end = System.currentTimeMillis();
+                    stats = sort(numbers, unsorted -> sortUsingInsertionSortAlgorithmWithList(new LinkedList<>(asList(unsorted))));
                     saveDataToFile(numbers, SORTED_FILE_NAME_PREFIX + filename);
                     break;
                 case "Q":
@@ -123,17 +103,18 @@ public class App {
                 default:
                     LOGGER.info("Wrong option has been chosen.");
             }
-            LOGGER.info("Sorting is finished, total sorting time: " + (end - start) + "ms");
+            LOGGER.info("Sorting is finished, total sorting time: " + stats.calculateAlgorithmExecutionTime() + "ms");
         }
     }
 
-//    private static AlgorithmExecutionStats sort(Integer[] numbers, Consumer<Integer> consumer) {
-//        long start = System.currentTimeMillis();
-//        function.apply();
-//        long end = System.currentTimeMillis();
-//
-//        return new AlgorithmExecutionStats(start, end);
-//    }
+    private static AlgorithmExecutionStats sort(Integer[] numbers, Consumer<Integer[]> consumer) {
+        LOGGER.info("Sorting array started.");
+        long start = System.currentTimeMillis();
+        consumer.accept(numbers);
+        long end = System.currentTimeMillis();
+
+        return new AlgorithmExecutionStats(start, end);
+    }
 
     private static void printSortingMenu() {
         System.out.println("Which method you want to sort the numbers?");
