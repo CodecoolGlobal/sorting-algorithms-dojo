@@ -93,10 +93,10 @@ public class App {
         }
     }
 
-    private static void sort(Integer[] numbers, Consumer<Integer[]> consumer) {
+    private static void sort(Integer[] numbers, Consumer<Integer[]> sortingMethod) {
         LOGGER.info("Sorting array started.");
         long start = System.currentTimeMillis();
-        consumer.accept(numbers);
+        sortingMethod.accept(numbers);
         long end = System.currentTimeMillis();
 
         LOGGER.info("Sorting is finished, total sorting time: " + (end - start) + "ms");
