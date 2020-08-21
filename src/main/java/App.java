@@ -12,12 +12,6 @@ import static java.util.Arrays.asList;
 public class App {
     private final static String RESOURCE_PATH_PREFIX = "src/main/resources/";
     private final static String SORTED_FILE_NAME_PREFIX = "sorted_";
-
-    /**
-     * This is array from quick sort presentation
-     */
-    private final static Integer[] ARRAY_FROM_QUICK_SORT_PRESENTATION = {2, 5, 3, 1, 6, 4};
-
     private final static Map<String, String> NUMBERS_TO_FILES = new HashMap<String, String>() {{
         put("1", "one_thousand.txt");
         put("2", "ten_thousand.txt");
@@ -134,73 +128,14 @@ public class App {
     }
 
     private static void sortUsingBuiltInMethod(Integer[] array) {
-        LOGGER.info("Sorting array started.");
-        Arrays.sort(array);
+        // TODO
     }
 
     private static void sortUsingInsertionSortAlgorithm(Integer[] array) {
-        int arrayLength = array.length;
-
-        for (int i = 0; i < arrayLength; i++) {
-            int key = array[i];
-            int j = i - 1;
-
-            while (j >= 0 && array[j] > key) {
-                array[j + 1] = array[j];
-                j = j - 1;
-            }
-
-            array[j + 1] = key;
-        }
+        // TODO
     }
 
     private static void sortUsingInsertionSortAlgorithmWithList(List<Integer> list) {
-        int arrayLength = list.size();
-
-        for (int i = 0; i < arrayLength; i++) {
-            int key = list.get(i);
-            int j = i - 1;
-
-            while (j >= 0 && list.get(j) > key) {
-                list.set(j + 1, list.get(j));
-                j = j - 1;
-            }
-
-            list.set(j + 1, key);
-        }
-    }
-
-    private static void sortUsingQuickSortAlgorithm(Integer[] array) {
-        quickSort(array, 0, array.length - 1);
-    }
-
-    private static void quickSort(Integer[] array, int begin, int end) {
-        if (begin < end) {
-            int partitionIndex = partition(array, begin, end);
-
-            quickSort(array, begin, partitionIndex - 1);
-            quickSort(array, partitionIndex + 1, end);
-        }
-    }
-
-    private static int partition(Integer[] array, int begin, int end) {
-        int pivot = array[end];
-        int i = (begin - 1);
-
-        for (int j = begin; j < end; j++) {
-            if (array[j] <= pivot) {
-                i++;
-
-                int swapTemp = array[i];
-                array[i] = array[j];
-                array[j] = swapTemp;
-            }
-        }
-
-        int swapTemp = array[i + 1];
-        array[i + 1] = array[end];
-        array[end] = swapTemp;
-
-        return i + 1;
+        // TODO
     }
 }
