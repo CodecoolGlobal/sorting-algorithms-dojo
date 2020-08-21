@@ -2,21 +2,14 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 import static java.nio.file.Files.lines;
+import static java.util.Arrays.asList;
 
 public class App {
-    /**
-     * Change the paths in getDataFromFile() method depending how do you run the program:
-     * if you run the program from IDE use RESOURCE_PATH_PREFIX
-     * if you run the program from cmd use COMMAND_LINE_PATH_PREFIX
-     * */
     private final static String RESOURCE_PATH_PREFIX = "src/main/resources/";
-    private final static String COMMAND_LINE_PATH_PREFIX = "../resources/";
-    private final static String NO_PARAMETER_MESSAGE = "No parameter provided. Exiting...";
     private final static String SORTED_FILE_NAME_PREFIX = "sorted_";
 
     /**
@@ -24,58 +17,32 @@ public class App {
      */
     private final static Integer[] ARRAY_FROM_QUICK_SORT_PRESENTATION = {2, 5, 3, 1, 6, 4};
 
+    private final static Map<String, String> NUMBERS_TO_FILES = new HashMap<String, String>() {{
+        put("1", "one_thousand.txt");
+        put("2", "ten_thousand.txt");
+        put("3", "fifty_thousand.txt");
+        put("4", "one_hundred_thousand.txt");
+        put("5", "five_hundred_thousand.txt");
+        put("6", "one_million.txt");
+        put("7", "three_millions.txt");
+    }};
+
     private static Logger LOGGER;
+    private static Scanner scanner;
 
     static {
         System.setProperty("java.util.logging.SimpleFormatter.format",
                 "[%1$tF %1$tT.%1$tL] [%4$-7s] %5$s %n");
         LOGGER = Logger.getLogger(App.class.getName());
+        scanner = new Scanner(System.in);
     }
 
-    /**
-     * @param args - To run program please provide file name to sort
-     * If running from IDE Add new configuration and provide file name as Program Argument
-     */
-    public static void main(String[] args) {
-        try {
-            if (args != null && args.length > 0) {
-                String fileName = args[0];
-
-                if (fileName != null && fileName.length() > 0) {
-                    /** If you want to sort numbers from file uncomment the line 50
-                     * and comment the 48 line
-                     */
-//                    Integer[] array = getDataFromFile(fileName);
-
-                    Integer[] array = ARRAY_FROM_QUICK_SORT_PRESENTATION;
-
-                    LOGGER.info("Sorting array started.");
-                    long start = System.currentTimeMillis();
-
-                    /** This is the place when you should replace the sorting method
-                     * (in case of lists, you should pass ArrayList or LinkedList
-                     * e.g.:
-                     * List<Integer> integers = Arrays.asList(array); -> returns ArrayList
-                     * List<Integer> link = new LinkedList<>(integers))
-                     */
-                    sortUsingQuickSortAlgorithm(array);
-
-                    long end = System.currentTimeMillis();
-                    long elapsedTime = end - start;
-                    LOGGER.info("Sorting is finished, total sorting time: " + elapsedTime + "ms");
-
-                    saveDataToFile(array, SORTED_FILE_NAME_PREFIX + fileName);
-                } else {
-                    LOGGER.info(NO_PARAMETER_MESSAGE);
-                }
-            } else {
-                LOGGER.info(NO_PARAMETER_MESSAGE);
-            }
-            /** This is hacky (for dojo purpose only) don't catch Exception
-             */
-        } catch (Exception e) {
-            LOGGER.severe("Problem with reading file. Exiting...");
-        }
+    public static void main(String[] args) throws IOException {
+        printFilesNames();
+        String filename = getFileNameFromUser();
+        Integer[] numbers = getDataFromFile(filename);
+        sortBasedOnUserChoice(numbers);
+        saveDataToFile(numbers, SORTED_FILE_NAME_PREFIX + filename);
     }
 
     private static Integer[] getDataFromFile(String fileName) throws IOException {
@@ -104,10 +71,12 @@ public class App {
     }
 
     private static void sortUsingBuiltInMethod(Integer[] array) {
+        LOGGER.info("Sorting array started.");
         Arrays.sort(array);
     }
 
     private static void sortUsingInsertionSortAlgorithm(Integer[] array) {
+        LOGGER.info("Sorting array started.");
         int arrayLength = array.length;
 
         for (int i = 0; i < arrayLength; i++) {
@@ -173,4 +142,66 @@ public class App {
         return i + 1;
     }
 
+    private static void sortBasedOnUserChoice(Integer[] numbers) {
+        boolean run = true;
+        while (run) {
+            printSortingMenu();
+            String response = scanner.nextLine();
+            long start = 0;
+            long end = 0;
+
+            switch (response) {
+                case "1":
+                    start = System.currentTimeMillis();
+                    sortUsingInsertionSortAlgorithm(numbers);
+                    end = System.currentTimeMillis();
+                    break;
+                case "2":
+                    start = System.currentTimeMillis();
+                    sortUsingBuiltInMethod(numbers);
+                    end = System.currentTimeMillis();
+                    break;
+                case "3":
+                    start = System.currentTimeMillis();
+                    sortUsingInsertionSortAlgorithmWithList(new ArrayList<>(asList(numbers)));
+                    end = System.currentTimeMillis();
+                    break;
+                case "4":
+                    start = System.currentTimeMillis();
+                    sortUsingInsertionSortAlgorithmWithList(new LinkedList<>(asList(numbers)));
+                    end = System.currentTimeMillis();
+                    break;
+                case "Q":
+                    run = false;
+                    break;
+                default:
+                    LOGGER.info("Wrong option has been chosen.");
+            }
+            LOGGER.info("Sorting is finished, total sorting time: " + (end - start) + "ms");
+        }
+    }
+
+    private static void printFilesNames() {
+        System.out.println("Which file do you want to sort? (one_thousand.txt is default)");
+        NUMBERS_TO_FILES.forEach((key, value) -> System.out.println(key + ") " + key));
+    }
+
+    private static String getFileNameFromUser() {
+        String chosenFilenameNumber = scanner.nextLine();
+        String filename = "one_thousand.txt";
+        if (NUMBERS_TO_FILES.containsKey(chosenFilenameNumber)) {
+            filename = NUMBERS_TO_FILES.get(chosenFilenameNumber);
+        }
+
+        return filename;
+    }
+
+    private static void printSortingMenu() {
+        System.out.println("Which method you want to sort the numbers?");
+        System.out.println("1) Insertion sort using own algorithm");
+        System.out.println("2) Insertion sort using builtin algorithm");
+        System.out.println("3) Insertion sort using ArrayList");
+        System.out.println("4) Insertion sort using LinkedList");
+        System.out.println("Q) Quit");
+    }
 }
