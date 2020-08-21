@@ -114,7 +114,7 @@ public class App {
 
     private static void saveDataToFile(Integer[] array, String fileName) {
         try {
-            File file = new File(String.format("src/main/resources/%s", fileName));
+            File file = new File(RESOURCE_PATH_PREFIX + fileName);
             BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
             for (int num : array) {
