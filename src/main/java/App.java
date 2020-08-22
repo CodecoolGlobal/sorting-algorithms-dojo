@@ -106,7 +106,7 @@ public class App {
     private static void printSortingMenu() {
         System.out.println("Which method you want to sort the numbers?");
         System.out.println("1) Insertion sort using own algorithm");
-        System.out.println("2) Insertion sort using builtin algorithm");
+        System.out.println("2) Sort using builtin algorithm");
         System.out.println("3) Insertion sort using ArrayList");
         System.out.println("4) Insertion sort using LinkedList");
         System.out.println("Q) Quit");
