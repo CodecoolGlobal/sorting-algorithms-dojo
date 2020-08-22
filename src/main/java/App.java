@@ -1,4 +1,5 @@
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Paths;
@@ -123,7 +124,8 @@ public class App {
 
     private static void saveDataToFile(Integer[] array, String fileName) {
         try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+            File file = new File(RESOURCE_PATH_PREFIX + fileName);
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
 
             for (int num : array) {
                 writer.write(num + "\n");
