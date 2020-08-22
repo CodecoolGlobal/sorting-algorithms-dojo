@@ -140,7 +140,6 @@ public class App {
     }
 
     private static void sortUsingBuiltInMethod(Integer[] array) {
-        LOGGER.info("Sorting array started.");
         Arrays.sort(array);
     }
 
