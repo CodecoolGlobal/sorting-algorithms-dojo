@@ -84,11 +84,15 @@ public class App {
                 break;
             case "3":
                 numbers = getDataFromFile(filename);
-                sort(numbers, unsorted -> sortUsingInsertionSortAlgorithmWithList(new ArrayList<>(asList(unsorted))));
+                List<Integer> arrayList = new ArrayList<>(asList(numbers));
+                sort(numbers, unsorted -> sortUsingInsertionSortAlgorithmWithList(arrayList));
+                numbers = arrayList.toArray(new Integer[numbers.length]);
                 break;
             case "4":
                 numbers = getDataFromFile(filename);
-                sort(numbers, unsorted -> sortUsingInsertionSortAlgorithmWithList(new LinkedList<>(asList(unsorted))));
+                List<Integer> linkedList = new LinkedList<>(asList(numbers));
+                sort(numbers, unsorted -> sortUsingInsertionSortAlgorithmWithList(linkedList));
+                numbers = linkedList.toArray(new Integer[numbers.length]);
                 break;
             default:
                 LOGGER.info("Wrong option has been chosen.");
